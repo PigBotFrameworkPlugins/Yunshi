@@ -8,7 +8,7 @@
 ```python
 from pbf.setup import pluginsManager
 YunshiApi = pluginsManager.require("yunshi")
-YunshiApi.generate("User NickName")
+img = YunshiApi.generate("User NickName")
 ```
 来生成。
 
