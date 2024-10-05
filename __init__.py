@@ -6,17 +6,19 @@ from pbf.utils.Register import Command, ownerPermission
 from pbf.controller.Data import Event
 from pbf.controller.Client import Msg
 from pbf.statement import Statement
+from pbf.utils import scheduler
+from apscheduler.jobstores.base import JobLookupError
 
 import random
 import textwrap
 import os
-import traceback
 import base64
 from io import BytesIO
 try:
     from PIL import Image, ImageDraw, ImageFont
 except ImportError:
     Utils.installPackage("Pillow==9.3.0")
+    from PIL import Image, ImageDraw, ImageFont
 
 _root_path = os.path.dirname(__file__)
 _TooLucky = ['大吉', '吉你太美']
@@ -68,6 +70,31 @@ class ImageStatement(Statement):
 
     def __init__(self, file):
         self.file = file
+
+
+def clear_imgs():
+    # 清理tmp目录下的图片
+    logger.info("Clearing images in tmp directory")
+
+    for file in os.listdir(f"{_root_path}/tmp"):
+        if file.endswith(".jpg"):
+            os.remove(f"{_root_path}/tmp/{file}")
+
+def _enter():
+    # 创建tmp目录
+    if not os.path.exists(f"{_root_path}/tmp"):
+        os.mkdir(f"{_root_path}/tmp")
+    # 每天零点清理tmp目录下的图片
+    scheduler.add_job(clear_imgs, "cron", hour=0, minute=0, second=0, id="clear_imgs", replace_existing=True)
+    # Test
+    # scheduler.add_job(clear_imgs, "interval", seconds=10, id="clear_imgs_test")
+
+def _exit():
+    try:
+        scheduler.remove_job("clear_imgs")
+    except JobLookupError:
+        pass
+
 
 class Api:
     @staticmethod
