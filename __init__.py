@@ -1,7 +1,7 @@
 from pbf.utils import MetaData, Utils
 from pbf.utils.Config import Config
 from pbf.setup import logger
-from pbf import config
+from pbf import config as defaultConfig
 from pbf.utils.Register import Command, ownerPermission
 from pbf.controller.Data import Event
 from pbf.controller.Client import Msg
@@ -55,7 +55,7 @@ class MyConfig(Config):
         "fortuneList": _Fortune_List
     }
 
-config = MyConfig(config.plugins_config.get("yunshi", {}))
+config = MyConfig(defaultConfig.plugins_config.get("yunshi", {}))
 todolist = config.get("todoList")
 nottodolist = config.get("nottodoList")
 TooLucky = config.get("tooLucky")
