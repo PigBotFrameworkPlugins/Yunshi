@@ -165,8 +165,7 @@ meta_data = MetaData(
 @Command(
         name="运势",
         usage="运势",
-        description="测测你的运势",
-        permission=ownerPermission
+        description="测测你的运势"
         )
 def YunshiGenerate(event: Event):
     # 先遍历一下./tmp/目录下有没有{event.user_id}.jpg，有的话就直接发出去
@@ -182,7 +181,7 @@ def YunshiGenerate(event: Event):
         
         buffered = BytesIO()
         res.save(buffered, format="JPEG")
-        content = base64.b64encode(buffered.getvalue())
-
+        content = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    
     # 考虑到有可能OB实现与SDK分离部署，以base64的方式发送图片
     Msg(ImageStatement(f"base64://{content}"), event=event).send()
