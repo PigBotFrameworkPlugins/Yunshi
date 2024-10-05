@@ -175,7 +175,7 @@ class Api:
 
 
 meta_data = MetaData(
-    name="Yunshi",
+    name="运势",
     version="0.0.1",
     versionCode=1,
     description="测测你的运势",
